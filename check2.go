@@ -35,9 +35,7 @@ func main() {
 						if err != nil {
 							log.Fatal(err)
 						}
-						fnp := strings.TrimSuffix(event.Name, filepath.Ext(event.Name))
-						tfp := fnp + ".tif"
-						err = os.Rename(tfp, "c:\\src\\"+"so"+on+".tif")
+						err = os.Rename(strings.TrimSuffix(event.Name, filepath.Ext(event.Name))+".tif", "c:\\src\\"+"so"+on+".tif")
 						if err != nil {
 							log.Fatal(err)
 						}
@@ -45,7 +43,7 @@ func main() {
 						if err != nil {
 							log.Fatal(err)
 						}
-						fmt.Println("Moved " + tfp + " to " + "c:\\src\\" + "so" + on + ".tif")
+						fmt.Println("Moved " + strings.TrimSuffix(event.Name, filepath.Ext(event.Name)) + ".tff" + " to " + "c:\\src\\" + "so" + on + ".tif")
 
 					}
 				}
