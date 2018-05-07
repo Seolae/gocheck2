@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
@@ -28,17 +29,23 @@ func main() {
 			case event := <-watcher.Events:
 				if event.Op&fsnotify.Create == fsnotify.Create {
 					if strings.Contains(event.Name, ".XST") {
-						fmt.Println(event.Name)
-						time.Sleep(500 * time.Millisecond)
-						on, err := rrline(event.Name, 86)
+						fmt.Println("Found new .XST waiting 3 seconds")
+						time.Sleep(3 * time.Second)
+						on, err = rrline(event.Name, 86)
 						if err != nil {
 							log.Fatal(err)
 						}
-						fmt.Println("so" + on)
+						fnp := strings.TrimSuffix(event.Name, filepath.Ext(event.Name))
+						tfp := fnp + ".tif"
+						err = os.Rename(tfp, "c:\\src\\"+"so"+on+".tif")
+						if err != nil {
+							log.Fatal(err)
+						}
 						err = os.Remove(event.Name)
 						if err != nil {
 							log.Fatal(err)
 						}
+						fmt.Println("Moved " + tfp + " to " + "c:\\src\\" + "so" + on + ".tif")
 
 					}
 				}
