@@ -14,6 +14,8 @@ import (
 )
 
 var on string
+var sercpath = `c:\test\`
+var destpath = `c:\src\`
 
 func main() {
 	watcher, err := fsnotify.NewWatcher()
@@ -35,7 +37,7 @@ func main() {
 						if err != nil {
 							log.Fatal(err)
 						}
-						err = os.Rename(strings.TrimSuffix(event.Name, filepath.Ext(event.Name))+".tif", "c:\\src\\"+"so"+on+".tif")
+						err = os.Rename(strings.TrimSuffix(event.Name, filepath.Ext(event.Name))+".tif", destpath+"so"+on+".tif")
 						if err != nil {
 							log.Fatal(err)
 						}
@@ -53,7 +55,7 @@ func main() {
 		}
 	}()
 
-	err = watcher.Add(`c:\test\`)
+	err = watcher.Add(sercpath)
 	if err != nil {
 		log.Fatal(err)
 	}
