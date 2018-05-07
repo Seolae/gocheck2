@@ -34,8 +34,6 @@ func main() {
 	if _, err := toml.DecodeFile("settings.conf", &conf); err != nil {
 		log.Println(err)
 	}
-	fmt.Println(conf.Paths.Onl)
-	fmt.Println(conf.Paths.Sourcepath)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
