@@ -14,8 +14,9 @@ import (
 )
 
 var on string
-var sercpath = `c:\test\`
-var destpath = `c:\src\`
+var sercpath = `c:\test\` //source path
+var destpath = `c:\src\` //dest path
+var onl = 86 //set this to what line you want to read the .XST
 
 func main() {
 	watcher, err := fsnotify.NewWatcher()
@@ -33,7 +34,7 @@ func main() {
 					if strings.Contains(event.Name, ".XST") {
 						fmt.Println("Found new .XST waiting 3 seconds")
 						time.Sleep(3 * time.Second)
-						on, err = rrline(event.Name, 86)
+						on, err = rrline(event.Name, onl)
 						if err != nil {
 							log.Fatal(err)
 						}
