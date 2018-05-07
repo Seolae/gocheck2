@@ -27,6 +27,7 @@ type paths struct {
 	Sourcepath string
 	Destpath   string
 	Onl        int
+	Filetype   string
 }
 
 func main() {
@@ -53,15 +54,13 @@ func main() {
 						if err != nil {
 							log.Fatal(err)
 						}
-						err = os.Rename(strings.TrimSuffix(event.Name, filepath.Ext(event.Name))+".tif", conf.Paths.Destpath+"so"+on+".tif")
-						if err != nil {
+						if err = os.Rename(strings.TrimSuffix(event.Name, filepath.Ext(event.Name))+conf.Paths.Filetype, conf.Paths.Destpath+"so"+on+conf.Paths.Filetype); err != nil {
 							log.Fatal(err)
 						}
-						err = os.Remove(event.Name)
-						if err != nil {
+						if err = os.Remove(event.Name); err != nil {
 							log.Fatal(err)
 						}
-						fmt.Println("Moved " + strings.TrimSuffix(event.Name, filepath.Ext(event.Name)) + ".tff" + " to " + "c:\\src\\" + "so" + on + ".tif")
+						fmt.Println("Moved " + strings.TrimSuffix(event.Name, filepath.Ext(event.Name)) + conf.Paths.Filetype + " to " + conf.Paths.Destpath + "so" + on + conf.Paths.Filetype)
 
 					}
 				}
@@ -71,8 +70,7 @@ func main() {
 		}
 	}()
 
-	err = watcher.Add(conf.Paths.Sourcepath)
-	if err != nil {
+	if err = watcher.Add(conf.Paths.Sourcepath); err != nil {
 		log.Fatal(err)
 	}
 	<-done
