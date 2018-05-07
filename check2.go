@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "github.com/qodrorid/godaemon"
 	"bufio"
 	"fmt"
 	"log"
@@ -11,15 +10,32 @@ import (
 	"strings"
 	"time"
 
+	_ "github.com/qodrorid/godaemon"
+
+	"github.com/BurntSushi/toml"
 	"github.com/fsnotify/fsnotify"
 )
 
 var on string
-var sercpath = `c:\test\` //source path
-var destpath = `c:\src\` //dest path
-var onl = 86 //set this to what line you want to read the .XST
+
+//Config loads the settings from settings.conf
+type Config struct {
+	Paths paths
+}
+
+type paths struct {
+	Sourcepath string
+	Destpath   string
+	Onl        int
+}
 
 func main() {
+	var conf Config
+	if _, err := toml.DecodeFile("settings.conf", &conf); err != nil {
+		log.Println(err)
+	}
+	fmt.Println(conf.Paths.Onl)
+	fmt.Println(conf.Paths.Sourcepath)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
@@ -35,11 +51,11 @@ func main() {
 					if strings.Contains(event.Name, ".XST") {
 						fmt.Println("Found new .XST waiting 3 seconds")
 						time.Sleep(3 * time.Second)
-						on, err = rrline(event.Name, onl)
+						on, err = rrline(event.Name, conf.Paths.Onl)
 						if err != nil {
 							log.Fatal(err)
 						}
-						err = os.Rename(strings.TrimSuffix(event.Name, filepath.Ext(event.Name))+".tif", destpath+"so"+on+".tif")
+						err = os.Rename(strings.TrimSuffix(event.Name, filepath.Ext(event.Name))+".tif", conf.Paths.Destpath+"so"+on+".tif")
 						if err != nil {
 							log.Fatal(err)
 						}
@@ -57,7 +73,7 @@ func main() {
 		}
 	}()
 
-	err = watcher.Add(sercpath)
+	err = watcher.Add(conf.Paths.Sourcepath)
 	if err != nil {
 		log.Fatal(err)
 	}
