@@ -30,7 +30,7 @@ func main() {
 					if strings.Contains(event.Name, ".XST") {
 						fmt.Println(event.Name)
 						time.Sleep(500 * time.Millisecond)
-						on, err := rrline(event.Name, 1)
+						on, err := rrline(event.Name, 86)
 						if err != nil {
 							log.Fatal(err)
 						}
