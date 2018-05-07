@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "github.com/qodrorid/godaemon"
 	"bufio"
 	"fmt"
 	"log"
