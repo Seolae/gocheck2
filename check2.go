@@ -32,6 +32,7 @@ type paths struct {
 
 func main() {
 	var conf Config
+	fmt.Println("Listening...")
 	if _, err := toml.DecodeFile("settings.conf", &conf); err != nil {
 		log.Println(err)
 	}
